@@ -63,7 +63,8 @@ export default async function Home({ searchParams }: ComponentProps) {
         <CardContent>
           <OrdersTable orders={orders} />
           <div className="mt-8">
-            <Pagination links={meta.links} />
+        
+          <Pagination links={meta.links} maxPage={meta.last_page || 1} />
           </div>
         </CardContent>
       </Card>
