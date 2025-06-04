@@ -1,7 +1,8 @@
-import FilterDropdown from '@/components/filter-dropdown';
-import OrdersTable from '@/components/orders-table';
-import Pagination from '@/components/pagination';
-import SearchInput from '@/components/search-input';
+import FilterDropdown from "@/components/filter-dropdown";
+import { ModeToggle } from "@/components/mode-toggle";
+import OrdersTable from "@/components/orders-table";
+import Pagination from "@/components/pagination";
+import SearchInput from "@/components/search-input";
 
 import {
   Card,
@@ -9,23 +10,24 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import axios from 'axios';
+} from "@/components/ui/card";
+import axios from "axios";
 
 type ComponentProps = {
   searchParams?: {
     search?: string;
     status?: string;
     sort?: string;
+    page?: string;
   };
 };
 
 export default async function Home({ searchParams }: ComponentProps) {
   // fetch dos dados
 
- const resolvedSearchParams = await searchParams;
+  const resolvedSearchParams = await searchParams;
 
-console.log(resolvedSearchParams?.search);
+  //console.log(resolvedSearchParams?.search);
 
   const response = await axios.get(
     "https://apis.codante.io/api/orders-api/orders",
@@ -34,31 +36,34 @@ console.log(resolvedSearchParams?.search);
         search: resolvedSearchParams?.search,
         status: resolvedSearchParams?.status,
         sort: resolvedSearchParams?.sort,
+        page: resolvedSearchParams?.page,
       },
     }
   );
-  const orders = response.data.data;
-//  console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'); 
-////  console.log('ORDEM: ', orders);
-//  console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'); 
+  
+  const orders = response.data?.data;
+  const meta = response.data?.meta || [];
 
-  return (
+ return (
     <main className="container px-1 py-10 md:p-10">
       <Card>
         <CardHeader className="px-7">
-          <CardTitle>Pedidos</CardTitle>
+          <div className="flex justify-between">
+            <CardTitle>Pedidos</CardTitle>
+            <ModeToggle />
+          </div>
           <CardDescription>
             Uma listagem de pedidos do seu negócio.
           </CardDescription>
-          <div className="flex pt-10 gap-4">
+          <div className="flex gap-4 pt-10">
             <SearchInput />
             <FilterDropdown />
           </div>
         </CardHeader>
         <CardContent>
-          <OrdersTable  orders={orders} />
+          <OrdersTable orders={orders} />
           <div className="mt-8">
-            <Pagination />
+            <Pagination links={meta.links} />
           </div>
         </CardContent>
       </Card>
