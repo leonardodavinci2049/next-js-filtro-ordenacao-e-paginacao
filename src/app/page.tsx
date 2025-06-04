@@ -1,13 +1,37 @@
-import { Button } from "@/components/ui/button";
+import FilterDropdown from '@/components/filter-dropdown';
+import OrdersTable from '@/components/orders-table';
+import Pagination from '@/components/pagination';
+import SearchInput from '@/components/search-input';
 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 gap-y-8">
-      <h1 className="font-mono">New Project Nextr.JS</h1>
-      <div>
-        <Button variant="destructive" >Click Here</Button>
-      </div>
-    </div>
+    <main className="container px-1 py-10 md:p-10">
+      <Card>
+        <CardHeader className="px-7">
+          <CardTitle>Pedidos</CardTitle>
+          <CardDescription>
+            Uma listagem de pedidos do seu negócio.
+          </CardDescription>
+          <div className="flex pt-10 gap-4">
+            <SearchInput />
+            <FilterDropdown />
+          </div>
+        </CardHeader>
+        <CardContent>
+          <OrdersTable />
+          <div className="mt-8">
+            <Pagination />
+          </div>
+        </CardContent>
+      </Card>
+    </main>
   );
 }
